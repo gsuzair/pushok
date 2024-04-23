@@ -47,6 +47,8 @@ class Payload implements \JsonSerializable
     const PAYLOAD_RELEVANCE_SCORE_KEY = 'relevance-score';
     const PAYLOAD_STALE_DATE_KEY = 'stale-date';
     const PAYLOAD_CONTENT_STATE_KEY = 'content-state';
+    const PAYLOAD_ATTRIBUTES_TYPE = 'attributes-type';
+    const PAYLOAD_ATTRIBUTES = 'attributes';
 
     const PAYLOAD_HTTP2_REGULAR_NOTIFICATION_MAXIMUM_SIZE = 4096;
     const PAYLOAD_HTTP2_VOIP_NOTIFICATION_MAXIMUM_SIZE = 5120;
@@ -168,6 +170,8 @@ class Payload implements \JsonSerializable
      * @var array
      */
     private $contentState;
+    private $attributesType;
+    private $attributes;
 
     protected function __construct()
     {
@@ -595,6 +599,28 @@ class Payload implements \JsonSerializable
         return $this->event;
     }
 
+    public function setAttributesType($attributesType)
+    {
+        $this->attributesType = $attributesType;
+        return $this;
+    }
+
+    public function getAttributesType()
+    {
+        return $this->attributesType;
+    }
+
+    public function setAttributes($attributes)
+    {
+        $this->attributes = $attributes;
+        return $this;
+    }
+
+    public function getAttributes()
+    {
+        return $this->attributes;
+    }
+
     /**
      * Convert Payload to JSON.
      *
@@ -686,6 +712,14 @@ class Payload implements \JsonSerializable
 
         if (is_double($this->relevanceScore)) {
             $payload[self::PAYLOAD_ROOT_KEY]->{self::PAYLOAD_RELEVANCE_SCORE_KEY} = $this->relevanceScore;
+        }
+
+        if (is_string($this->attributesType)) {
+            $payload[self::PAYLOAD_ROOT_KEY]->{self::PAYLOAD_ATTRIBUTES_TYPE} = $this->attributesType;
+        }
+
+        if (is_array($this->attributes)) {
+            $payload[self::PAYLOAD_ROOT_KEY]->{self::PAYLOAD_ATTRIBUTES} = $this->attributes;
         }
 
         return $payload;
